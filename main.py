@@ -13,9 +13,6 @@ class Args:
         self.audio  = audio
         self.jump   = jump
         self.to     = to
-    
-    def debug(self):
-        print(Fore.CYAN + f'Path: {self.path}\nAudio: {self.audio} | Jump: {self.jump} | To: {self.to}\n{self.url}')
 
 class Tubes:
     def __init__(self, ytb:YouTube, path):
@@ -23,9 +20,6 @@ class Tubes:
         self.title      = ytb.title + '.mp4'
         self.path       = path
     
-    def debug(self):
-        print(Fore.CYAN + f'Path: {self.path}\nTitle: {self.title}\nYTB: {self.ytb}')
-
     def download(self, audio):
         try:
             if audio:

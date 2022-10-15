@@ -62,10 +62,10 @@ def playlistInfos(pl:Playlist):
         lastUp = pl.last_updated
     except:
         lastUp = 'Error getting Last Update Date'
-    print(Fore.WHITE + f'Name: {title}', end='')
-    print(Fore.WHITE + f' | Owner: {owner}', end='')
-    print(Fore.WHITE + f' | Length: {length}', end='')
-    print(Fore.WHITE + f' | Last Update: {lastUp}')
+    print(Fore.CYAN + f'Name: {title}', end='')
+    print(Fore.CYAN + f' | Owner: {owner}', end='')
+    print(Fore.CYAN + f' | Length: {length}', end='')
+    print(Fore.CYAN + f' | Last Update: {lastUp}')
 
 def getPlaylistTubes(playlist:Playlist, args:Args):
     temp = list(playlist.videos)
@@ -152,7 +152,7 @@ __  __                 ____                      __                __   ______  
     args = main()
     init(autoreset=True)
     print(Fore.MAGENTA + BANNER)
-    print(Fore.RED + 'WAIT PLEASE. It can take some time before appearing something depending on number of video the playlist have and innternet connection speed')
+    print(Fore.MAGENTA + 'Can take some minutes depending of internet speed and number of videos of the playlist')
     print('-'*100)
     for url in args.url:
         match isPlaylist(url):
@@ -161,14 +161,21 @@ __  __                 ____                      __                __   ______  
                 continue
             case False:
                 tubes = Tubes(url, args.path)
+                print(Fore.CYAN + 'Path: ' + tubes[0].path)
             case True:
-                playlistInfos(Playlist(url))
                 tubes = getPlaylistTubes(Playlist(url), args)
-        filesPath = [f for f in listdir(tubes[0].path) if isfile(join(tubes[0].path, f))]
+                print(Fore.CYAN + 'Path: ' + tubes[0].path)
+                playlistInfos(Playlist(url))
+                
+        if len(tubes) == 0:
+            print(Fore.RED + 'No video founds - retry')
+            exit()
+        if os.path.exists(tubes[0].path):
+            filesPath = [f for f in listdir(tubes[0].path) if isfile(join(tubes[0].path, f))]
 
         for c, tube in enumerate(tubes):
             print(f'[{c+1:^4}/{len(tubes):^4}] - ', end='')
-            title = tube.title if len(tube.title) < 50 else tube.title[0:49] 
+            title = tube.title if len(tube.title) < 50 else tube.title[0:49]
             print(f'{title:<50} |', end='')
             if isExist(filesPath, tube.title):
                 print(Fore.YELLOW + 'Already Exist')
